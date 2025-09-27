@@ -38,7 +38,7 @@ fun BottomNavigationBar() {
     val items = listOf(
         NavItem("Inicio", Icons.Filled.Home),
         NavItem("Pagos", Icons.Outlined.Payment),
-        NavItem("Transferencias", Icons.Outlined.Cached),
+        NavItem("Transferir", Icons.Outlined.Cached),
         NavItem("Menú", Icons.Outlined.Menu)
     )
 
