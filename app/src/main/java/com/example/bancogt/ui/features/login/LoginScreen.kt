@@ -1,10 +1,12 @@
 package com.example.bancogt.ui.features.login
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.bancogt.R
 import com.example.bancogt.ui.components.TextSwitch
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
+import java.time.format.TextStyle
 
 @Preview(showBackground = true)
 @Composable
@@ -76,13 +82,14 @@ fun LoginScreen(
                     onValueChange = viewModel::onUserChange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(40.dp),
+                        .height(50.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
                         unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
-                    )
+                    ),
+                    placeholder = { Text("Usuario") }
                 )
 
                 TextField(
@@ -90,13 +97,15 @@ fun LoginScreen(
                     onValueChange = viewModel::onPasswordChange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(40.dp),
+                        .height(50.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
                         unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
-                    )
+                    ),
+                    placeholder = { Text("Password") }
+
                 )
 
                 Row(
@@ -115,7 +124,7 @@ fun LoginScreen(
                     }
 
                     Text(
-                        "¿Olvidaste tu contraseña?",
+                        text = "¿Olvidaste tu contraseña?",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.clickable { /* recuperar */ }
@@ -132,6 +141,19 @@ fun LoginScreen(
                 ) {
                     Text("Ingresar")
                 }
+
+                Text(
+                    text = ("Ingresa con reconocimiento facial"),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                )
+
+                Icon(
+                    imageVector = Icons.Filled.Face,
+                    contentDescription = "Reconocimiento facial",
+                    modifier = Modifier.size(40.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }
