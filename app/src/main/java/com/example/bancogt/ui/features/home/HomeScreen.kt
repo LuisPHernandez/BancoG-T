@@ -17,7 +17,6 @@ import androidx.navigation.NavController
 import com.example.bancogt.navigation.Screens
 import com.example.bancogt.ui.components.BottomNavigationBar
 import com.example.bancogt.ui.features.login.LoginViewModel
-import kotlin.random.Random
 
 @Composable
 fun HomeScreen(
@@ -35,26 +34,31 @@ fun HomeScreen(
                 }
             }
         },
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        }
+        bottomBar = { BottomNavigationBar(navController) },
+        containerColor = MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.onBackground
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize(),
+                .fillMaxSize()
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp, horizontal = 16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
-            ){
-                Text("Bienvenido, ${viewModel.user}", style = MaterialTheme.typography.headlineMedium)
-
-                for (i in 1..2) {
-                    BalanceCard(credit = true, balance = 1000.00, id = Random.nextInt(1,1000000))
-                }
+            ) {
+                Text(
+                    text = "Bienvenido, ${viewModel.user}",
+                    style = MaterialTheme.typography.headlineMedium
+                )
             }
+
+            // Dos cuentas de ejemplo
+            BalanceCard(accountType = true,  balance = 1000.0, id = 123456, owner = viewModel.user)
+            BalanceCard(accountType = false, balance = 250.5,  id = 987654, owner = viewModel.user)
         }
     }
 

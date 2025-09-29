@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BancoGTTheme(dynamicColor = false) {
+            BancoGTTheme {
 
                 val navController = rememberNavController()
                 val loginViewModel by remember { mutableStateOf(LoginViewModel())}

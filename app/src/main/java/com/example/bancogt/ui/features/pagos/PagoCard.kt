@@ -64,7 +64,7 @@ fun PagoCard(
                 )
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyMedium.copy(
+                    style = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.SemiBold, // Más bold como GTC
                         fontSize = 13.sp
                     ),

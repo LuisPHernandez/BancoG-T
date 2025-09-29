@@ -1,8 +1,5 @@
 package com.example.bancogt.ui.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Cached
@@ -14,81 +11,74 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.bancogt.ui.theme.BluePrimary
-import com.example.bancogt.ui.theme.WhiteBackground
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 data class NavItem(
     val label: String,
     val icon: ImageVector,
     val badgeCount: Int? = null
 )
-
 @Composable
-fun BottomNavigationBar() {
-    var selectedIndex by remember { mutableIntStateOf(0) }
+fun BottomNavigationBar(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
 
-    val items = listOf(
-        NavItem("Inicio", Icons.Filled.Home),
-        NavItem("Pagos", Icons.Outlined.Payment),
-        NavItem("Transferir", Icons.Outlined.Cached),
-        NavItem("Menú", Icons.Outlined.Menu)
+    // Mantiene orden de inserción
+    val navItems: LinkedHashMap<NavItem, String> = linkedMapOf(
+        NavItem("Inicio", Icons.Filled.Home)         to "home",
+        NavItem("Pagos", Icons.Outlined.Payment)     to "pagos",
+        NavItem("Transferir", Icons.Outlined.Cached) to "transferencias",
+        NavItem("Menú", Icons.Outlined.Menu)         to "menu"
     )
 
-    NavigationBar(
-        containerColor = WhiteBackground
+    NavigationBar(modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
     ) {
-        items.forEachIndexed { index, item ->
+        navItems.forEach { (item, route) ->
+            val selected = currentRoute == route
+
             NavigationBarItem(
-                selected = selectedIndex == index,
-                onClick = { selectedIndex = index },
+                selected = selected,
+                onClick = { navController.navigateSingleTopTo(route) },
                 icon = {
                     if (item.badgeCount != null) {
                         BadgedBox(badge = { Badge { Text("${item.badgeCount}") } }) {
-                            Icon(
-                                item.icon,
-                                contentDescription = item.label,
-                                tint = BluePrimary // Íconos en azul corporativo
-                            )
+                            Icon(item.icon, contentDescription = item.label)
                         }
                     } else {
-                        Icon(
-                            item.icon,
-                            contentDescription = item.label,
-                            tint = BluePrimary
-                        )
+                        Icon(item.icon, contentDescription = item.label)
                     }
                 },
-                label = {
-                    Text(
-                        item.label,
-                        color = BluePrimary
-                    )
-                }
+                label = { Text(item.label) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.primary
+                )
             )
         }
     }
 }
 
-@Preview(showBackground = true, name = "BottomNavigationBar Preview")
-@Composable
-private fun BottomNavigationBarPreview() {
-    MaterialTheme {
-        Scaffold(
-            bottomBar = { BottomNavigationBar() }
-        ) { innerPadding ->
-            Box(
-                modifier = Modifier.fillMaxSize().padding(innerPadding)
-            )
+/** Navegación “singleTop” entre tabs con restore de estado */
+fun NavController.navigateSingleTopTo(route: String) {
+    navigate(route) {
+        launchSingleTop = true
+        restoreState = true
+        popUpTo(graph.findStartDestination().id) {
+            saveState = true
         }
     }
 }

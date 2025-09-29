@@ -100,7 +100,7 @@ fun LoginScreen(
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
                         unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSecondary,
                     ),
-                    placeholder = { Text("Password") }
+                    placeholder = { Text("Contraseña") }
 
                 )
 
@@ -116,7 +116,7 @@ fun LoginScreen(
                     )
 
                     Box {
-                        Spacer(modifier = Modifier.size(70.dp))
+                        Spacer(modifier = Modifier.size(50.dp))
                     }
 
                     Text(

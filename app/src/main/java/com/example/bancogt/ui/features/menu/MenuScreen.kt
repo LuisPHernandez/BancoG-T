@@ -2,23 +2,50 @@ package com.example.bancogt.ui.features.menu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.outlined.AccountBalanceWallet
+import androidx.compose.material.icons.outlined.AddShoppingCart
+import androidx.compose.material.icons.outlined.AssignmentTurnedIn
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.ConfirmationNumber
+import androidx.compose.material.icons.outlined.HeadsetMic
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.MiscellaneousServices
+import androidx.compose.material.icons.outlined.RequestQuote
+import androidx.compose.material.icons.outlined.Savings
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.bancogt.navigation.Screens
+import com.example.bancogt.ui.components.BottomNavigationBar
+import com.example.bancogt.ui.features.home.HomeTopBar
+import com.example.bancogt.ui.features.login.LoginViewModel
 import com.example.bancogt.ui.theme.BluePrimary
+import com.example.bancogt.ui.theme.GrayOnSecondary
 import com.example.bancogt.ui.theme.GraySecondary
 import com.example.bancogt.ui.theme.WhiteBackground
-import com.example.bancogt.ui.theme.GrayOnSecondary
-import com.example.bancogt.ui.components.BottomNavigationBar
 
 data class MenuItemUi(val label: String, val icon: ImageVector)
 
@@ -39,10 +66,23 @@ private val menuItemsExact = listOf(
 @Composable
 fun MenuFramedScreen(
     items: List<MenuItemUi> = menuItemsExact,
-    bottomBar: @Composable () -> Unit = {},
+    viewModel: LoginViewModel,
+    navController: NavController,
     onItemClick: (MenuItemUi) -> Unit = {}
 ) {
-    Scaffold(bottomBar = bottomBar) { innerPadding ->
+    Scaffold(
+        topBar = {
+            HomeTopBar {
+                viewModel.user = ""
+                viewModel.password = ""
+                viewModel.checked = false
+                navController.navigate(Screens.Login.route) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+        },
+        bottomBar = {BottomNavigationBar(navController)}
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -101,15 +141,4 @@ private fun MenuRow(item: MenuItemUi, onClick: () -> Unit) {
             .padding(horizontal = 12.dp)
             .clickable(onClick = onClick)
     )
-}
-
-@Preview(showBackground = true, showSystemUi = true, name = "Menú con marco (header fuera)")
-@Composable
-private fun MenuFramedScreenPreview() {
-    MaterialTheme {
-        MenuFramedScreen(
-            items = menuItemsExact,
-            bottomBar = { BottomNavigationBar() }
-        )
-    }
 }
