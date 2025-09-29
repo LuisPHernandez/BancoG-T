@@ -163,13 +163,3 @@ fun PagosScreenPreview() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PagoCardPreview() {
-    MaterialTheme {
-        PagoCard(
-            title = "Tarjeta de Crédito",
-            icon = Icons.Filled.CreditCard
-        )
-    }
-}
