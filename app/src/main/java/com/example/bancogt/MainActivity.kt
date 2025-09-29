@@ -5,14 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.bancogt.navigation.AppNavigation
-import com.example.bancogt.ui.features.login.LoginScreen
+import com.example.bancogt.ui.features.login.LoginViewModel
 import com.example.bancogt.ui.theme.BancoGTTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,27 +22,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BancoGTTheme(dynamicColor = false) {
+
+                val navController = rememberNavController()
+                val loginViewModel by remember { mutableStateOf(LoginViewModel())}
+
                 Surface(
                     modifier = Modifier
                         .fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation()
+                    AppNavigation(navController = navController, loginViewModel = loginViewModel)
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    BancoGTTheme(dynamicColor = false) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            LoginScreen()
         }
     }
 }
