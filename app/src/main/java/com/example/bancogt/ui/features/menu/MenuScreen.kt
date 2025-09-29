@@ -7,11 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
 import androidx.compose.material.icons.outlined.AddShoppingCart
@@ -33,8 +32,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -90,21 +89,6 @@ fun MenuFramedScreen(
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(BluePrimary),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Text(
-                    text = "Menú",
-                    color = WhiteBackground,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(horizontal = 20.dp)
-                )
-            }
-
-            Box(
-                modifier = Modifier
                     .fillMaxSize()
                     .background(GraySecondary)
             ) {
@@ -117,10 +101,24 @@ fun MenuFramedScreen(
                     tonalElevation = 0.dp,
                     shadowElevation = 2.dp
                 ) {
-                    LazyColumn(contentPadding = PaddingValues(vertical = 8.dp)) {
-                        items(items) { item ->
-                            MenuRow(item) { onItemClick(item) }
-                            Divider(color = GrayOnSecondary)
+                    // Recorta el contenido al radio de esquina del Surface
+                    val shape = MaterialTheme.shapes.large
+                    androidx.compose.foundation.layout.Box(
+                        Modifier
+                            .clip(shape)
+                            .background(WhiteBackground)
+                    ) {
+                        LazyColumn(
+                            // padding solo arriba; sin padding abajo para no dejar “casilla” extra
+                            contentPadding = PaddingValues(top = 8.dp, bottom = 0.dp)
+                        ) {
+                            itemsIndexed(items) { index, item ->
+                                MenuRow(item) { onItemClick(item) }
+                                // Divider solo entre items, nunca después del último
+                                if (index < items.lastIndex) {
+                                    Divider(color = GrayOnSecondary)
+                                }
+                            }
                         }
                     }
                 }

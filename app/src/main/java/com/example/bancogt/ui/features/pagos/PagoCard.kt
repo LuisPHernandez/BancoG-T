@@ -64,9 +64,9 @@ fun PagoCard(
                 )
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.headlineSmall.copy(
+                    style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.SemiBold, // Más bold como GTC
-                        fontSize = 13.sp
+                        fontSize = 17.sp
                     ),
                     textAlign = TextAlign.Center,
                     color = Color(0xFF1976D2), // Azul GTC específico

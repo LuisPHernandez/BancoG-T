@@ -44,7 +44,7 @@ fun BalanceCard(accountType: Boolean, balance: Double, id: Int, owner: String){
                 modifier = Modifier.align(Alignment.TopStart)
             ) {
                 Text(
-                    text = "Cuenta $accountTypeText BAC-$id",
+                    text = "Cuenta $accountTypeText G&T-$id",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary
                 )

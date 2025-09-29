@@ -9,6 +9,7 @@ import com.example.bancogt.ui.features.login.LoginScreen
 import com.example.bancogt.ui.features.login.LoginViewModel
 import com.example.bancogt.ui.features.menu.MenuFramedScreen
 import com.example.bancogt.ui.features.pagos.PagosScreen
+import com.example.bancogt.ui.features.transferencias.TransferenciasScreen
 
 @Composable
 fun AppNavigation(
@@ -31,11 +32,8 @@ fun AppNavigation(
         composable(Screens.Menu.route){
             MenuFramedScreen(viewModel = loginViewModel, navController = navController)
         }
-
-        /*
         composable(Screens.Transferencias.route){
-            TransferenciasScreen()
+            TransferenciasScreen(viewModel = loginViewModel, navController = navController)
         }
-        */
     }
 }

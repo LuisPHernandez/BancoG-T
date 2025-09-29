@@ -34,12 +34,11 @@ fun BottomNavigationBar(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
-    // Mantiene orden de inserción
     val navItems: LinkedHashMap<NavItem, String> = linkedMapOf(
-        NavItem("Inicio", Icons.Filled.Home)         to "home",
-        NavItem("Pagos", Icons.Outlined.Payment)     to "pagos",
+        NavItem("Inicio", Icons.Filled.Home) to "home",
+        NavItem("Pagos", Icons.Outlined.Payment) to "pagos",
         NavItem("Transferir", Icons.Outlined.Cached) to "transferencias",
-        NavItem("Menú", Icons.Outlined.Menu)         to "menu"
+        NavItem("Menú", Icons.Outlined.Menu) to "menu"
     )
 
     NavigationBar(modifier = modifier,
