@@ -58,30 +58,36 @@ import com.example.bancogt.ui.features.login.LoginViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PagosScreen(
-    viewModel: LoginViewModel,
-    navController: NavController
+@Composable // construir interfaces
+fun PagosScreen( //pantalla recibe 2 parametros
+    viewModel: LoginViewModel, //Para acceder al usuario y poder hacer logout
+    navController: NavController //Para navegar entre pantallas
 ) {
-    var showQRBottomSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
 
-    val pagoOptions = listOf(
-        PagoOption("Cobro de Remesas", Icons.Filled.AccountBalance),
+    // Estado del Bottom Sheet
+    var showQRBottomSheet by remember { mutableStateOf(false) } //var si qr visible o nel
+    val sheetState = rememberModalBottomSheetState()//Estado del Modal Bottom Sheet (para animaciones)
+    val scope = rememberCoroutineScope() //Para ejecutar operaciones asíncronas (como cerrar el sheet)
+
+    val pagoOptions = listOf( //lista de opciones de pago
+
+        //en donde cada opcion tiene titulo y icono
+        PagoOption("Cobro de Remesas", Icons.Filled.AccountBalance), //iconos de las opciones
         PagoOption("Tarjeta de Crédito", Icons.Filled.CreditCard),
         PagoOption("Declaraguate", Icons.Filled.Description),
         PagoOption("Servicios", Icons.Filled.Receipt),
         PagoOption("Préstamos", Icons.Filled.MonetizationOn),
-        PagoOption("Pago QR", Icons.Filled.QrCode, onClick = {
-            showQRBottomSheet = true
+        PagoOption("Pago QR", Icons.Filled.QrCode, onClick = { // solo pagoQR tiene accion, solo para representar el QR
+            showQRBottomSheet = true //aqui se activa el bottomSheet
         })
     )
 
-    Scaffold(
-        topBar = {
+    Scaffold( // Scaffold con TopBar y BottomBar, scaffold es tecnica que genera automáticamente la estructura básica de una aplicación
+
+        topBar = { //Muestra el logo del banco y botón de logout
             HomeTopBar {
-                viewModel.user = ""
+                //va  a tener la logica del logout
+                viewModel.user = "" //limpian las variables del viewModel
                 viewModel.password = ""
                 viewModel.checked = false
                 navController.navigate(Screens.Login.route) {
@@ -89,7 +95,7 @@ fun PagosScreen(
                 }
             }
         },
-        bottomBar = {
+        bottomBar = { //Barra de navegación inferior para cambiar entre secciones
             BottomNavigationBar(navController)
         }
     ) { paddingValues ->
@@ -99,35 +105,36 @@ fun PagosScreen(
                 .background(Color(0xFFF5F5F5))
                 .padding(paddingValues)
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxSize()
+            LazyVerticalGrid( //un tipo de lazy components Grid de Tarjetas de Pago
+                columns = GridCells.Fixed(2), // van a ser 2 columnas
+                contentPadding = PaddingValues(16.dp), //espacio entre tarjetas
+                horizontalArrangement = Arrangement.spacedBy(12.dp), //espacio entre tarjetas
+                verticalArrangement = Arrangement.spacedBy(12.dp),//espacio entre tarjetas
+                modifier = Modifier.fillMaxSize() //tamaño del grid completo (toda la pantalla)
             ) {
                 items(pagoOptions) { option ->
                     PagoCard(
                         title = option.title,
                         icon = option.icon,
-                        onClick = option.onClick
+                        onClick = option.onClick // ← Ejecuta la acción de cada card, en este caso, el onClick solo seria para el qr
                     )
                 }
             }
         }
 
         // ModalBottomSheet para Pago QR que se hizo
-        if (showQRBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = { showQRBottomSheet = false },
+        if (showQRBottomSheet) { // Solo se muestra si esta variable es true
+            ModalBottomSheet( //se muestra el bottom sheet,omponente que aparece sobre el contenido actual, como un drawer o cajón que se desliza desde la parte inferior de la pantalla.
+                onDismissRequest = { showQRBottomSheet = false }, // Cerrar al tocar fuera
                 sheetState = sheetState,
-                containerColor = Color(0xFFE3F2FD) // Azul muy claro
+                // ↓ El componente automáticamente se desliza desde abajo
+                containerColor = Color(0xFFE3F2FD) // Fondo azul claro
             ) {
                 QROptionsBottomSheet(
-                    onDismiss = {
-                        scope.launch {
-                            sheetState.hide()
-                            showQRBottomSheet = false
+                    onDismiss = { // Cerrar al tocar fuera
+                        scope.launch { //Ejecutar corrutina,operaciones corren en segundo plano, Son tareas que toman tiempo en ejecutarse
+                            sheetState.hide() // Cerrar el bottom sheet
+                            showQRBottomSheet = false // Cerrar el bottom sheet
                         }
                     }
                 )
@@ -137,6 +144,7 @@ fun PagosScreen(
 }
 
 @Composable
+//Contenido del Bottom Sheet
 fun QROptionsBottomSheet(
     onDismiss: () -> Unit = {}
 ) {
@@ -231,7 +239,7 @@ fun PagosScreenPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun QROptionsBottomSheetPreview() {
+fun QROptionsBottomSheetPreview() { //preview del bottom sheet
     MaterialTheme {
         QROptionsBottomSheet()
     }
